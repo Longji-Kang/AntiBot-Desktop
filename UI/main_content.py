@@ -68,3 +68,13 @@ class MainContent:
 
     def mode_clicked(self):
         pass
+
+    def hide(self):
+        self.on_off_container.removeWidget(self.button)
+        self.on_off_container.removeWidget(self.mode_button)
+
+        self.label_box.removeWidget(self.last_scanned_label)
+        self.label_box.removeWidget(self.last_update_label)
+
+        self.content_box.removeWidget(self.last_scanned)
+        self.content_box.removeWidget(self.last_update)
