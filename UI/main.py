@@ -1,11 +1,12 @@
 from PyQt6.QtWidgets import QMainWindow, QApplication, QGridLayout, QPushButton, QVBoxLayout, QLabel, QWidget, QSpacerItem
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QThreadPool
 from sidebar import Sidebar
 from version_tab import VersionTab
 from ui_controller import UiController
 
 import sys
-
+sys.path.append('../AntiBot-Desktop')
+from BusinessLogic.UpdatesSceduler import UpdatesSchedulerClass
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -35,6 +36,10 @@ class MainWindow(QMainWindow):
 
         self.showMaximized()
 
+        self.threadPool = QThreadPool()
+
+        self.scheduler = UpdatesSchedulerClass()
+        self.threadPool.start(self.scheduler)
 
 app = QApplication(sys.argv)
 w = MainWindow()

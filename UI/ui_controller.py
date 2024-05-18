@@ -7,6 +7,7 @@ class UiController:
         self.grid = grid
         self.main_content = None
         self.logging_content = None
+        
 
     def switchToMain(self):
         self.main_content = MainContent()
@@ -17,6 +18,7 @@ class UiController:
             self.logging_content = None
 
         self.grid.addLayout(self.main_content.getContainer(), 1, 1, 1, 1)
+ 
 
     def switchToLogging(self):
         self.logging_content = LoggingContent()

@@ -1,6 +1,11 @@
 from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QVBoxLayout, QLabel, QWidget
 from PyQt6.QtCore import Qt
 from custom_palette import CustomPalette
+import sys
+
+sys.path.append('../AntiBot-Desktop')
+
+from BusinessLogic.ConfigState import ConfigurationState, Modes
 
 class MainContent:
     def __init__(self) -> None:
@@ -20,10 +25,16 @@ class MainContent:
         self.button.setFixedWidth(200)
         self.button.setFixedHeight(75)
 
-        self.mode_button = QPushButton('Current Mode: Simple Mode')
-        self.mode_button.setPalette(CustomPalette.passive_palette)
-        self.mode_button.setFixedWidth(200)
-        self.mode_button.setFixedHeight(75)
+        if ConfigurationState.getState() == Modes.BASIC:
+            self.mode_button = QPushButton('Current Mode: Simple Mode')
+            self.mode_button.setPalette(CustomPalette.passive_palette)
+            self.mode_button.setFixedWidth(200)
+            self.mode_button.setFixedHeight(75)
+        else:
+            self.mode_button = QPushButton('Current Mode: Advanced Mode')
+            self.mode_button.setPalette(CustomPalette.active_palette)
+            self.mode_button.setFixedWidth(200)
+            self.mode_button.setFixedHeight(75)
 
         self.button.clicked.connect(self.on_off_clicked)
         self.mode_button.clicked.connect(self.mode_clicked)
@@ -67,7 +78,15 @@ class MainContent:
             self.button.setText("Toggle State: ON")
 
     def mode_clicked(self):
-        pass
+        # Basic -> Advanced
+        if self.mode_button.palette() == CustomPalette.passive_palette:
+            self.mode_button.setPalette(CustomPalette.active_palette)
+            self.mode_button.setText('Current Mode: Advanced Mode')
+            ConfigurationState.setState(Modes.ADVANCED)
+        else:
+            self.mode_button.setPalette(CustomPalette.passive_palette)
+            self.mode_button.setText('Current Mode: Basic Mode')
+            ConfigurationState.setState(Modes.BASIC)
 
     def hide(self):
         self.on_off_container.removeWidget(self.button)
