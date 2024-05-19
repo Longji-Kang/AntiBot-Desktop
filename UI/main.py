@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import QMainWindow, QApplication, QGridLayout, QPushButton, QVBoxLayout, QLabel, QWidget, QSpacerItem
-from PyQt6.QtCore import Qt, QThreadPool
+from PyQt6.QtWidgets import QMainWindow, QApplication, QGridLayout, QWidget
+from PyQt6.QtCore import Qt, QThread
 from sidebar import Sidebar
 from version_tab import VersionTab
 from ui_controller import UiController
@@ -34,12 +34,16 @@ class MainWindow(QMainWindow):
 
         self.controller.switchToMain()
 
+        self.updates = UpdatesSchedulerClass()
+        self.updates_thread = QThread()
+
+        self.updates.moveToThread(self.updates_thread)
+
+        self.updates_thread.started.connect(self.updates.run)
+
+        self.updates_thread.start()
+
         self.showMaximized()
-
-        self.threadPool = QThreadPool()
-
-        self.scheduler = UpdatesSchedulerClass()
-        self.threadPool.start(self.scheduler)
 
 app = QApplication(sys.argv)
 w = MainWindow()
