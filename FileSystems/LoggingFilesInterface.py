@@ -22,6 +22,9 @@ class LoggingFilesInterface:
             file_name = datetime.today().strftime('%d-%m-%Y')
             file_dir = f'{self.path}/{file_name}'
 
+            if not os.path.exists(self.path):
+                os.mkdir(self.path)
+
             with open(file_dir, 'a') as file:
                 file.write(f'{log_data}\n')
 
