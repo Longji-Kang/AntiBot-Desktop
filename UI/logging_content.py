@@ -15,3 +15,5 @@ class LoggingContent:
     
     def hide(self):
         self.container.removeWidget(self.text_field)
+        self.text_field.deleteLater()
+        self.container.deleteLater()

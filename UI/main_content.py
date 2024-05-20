@@ -97,3 +97,13 @@ class MainContent:
 
         self.content_box.removeWidget(self.last_scanned)
         self.content_box.removeWidget(self.last_update)
+
+        self.button.deleteLater()
+        self.mode_button.deleteLater()
+        self.last_scanned_label.deleteLater()
+        self.last_update_label.deleteLater()
+        self.last_scanned.deleteLater()
+        self.last_update.deleteLater()
+        self.on_off_container.deleteLater()
+        self.label_box.deleteLater()
+        self.content_box.deleteLater()
