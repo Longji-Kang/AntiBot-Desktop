@@ -6,9 +6,10 @@ import sys
 sys.path.append('../AntiBot-Desktop')
 
 from BusinessLogic.ConfigState import ConfigurationState, Modes
+from BusinessLogic.LoggingComponent import LoggingComponentClass
 
 class MainContent:
-    def __init__(self) -> None:
+    def __init__(self, logger: LoggingComponentClass) -> None:
         self.container = QVBoxLayout()
 
         self.on_off_container = self.createOnOffContainer()
@@ -16,6 +17,8 @@ class MainContent:
 
         self.container.addLayout(self.on_off_container)
         self.container.addLayout(self.labels_container)
+
+        self.logger = logger
 
     def createOnOffContainer(self):
         container = QVBoxLayout()
@@ -82,11 +85,11 @@ class MainContent:
         if self.mode_button.palette() == CustomPalette.passive_palette:
             self.mode_button.setPalette(CustomPalette.active_palette)
             self.mode_button.setText('Current Mode: Advanced Mode')
-            ConfigurationState.setState(Modes.ADVANCED)
+            ConfigurationState.setState(Modes.ADVANCED, self.logger)
         else:
             self.mode_button.setPalette(CustomPalette.passive_palette)
             self.mode_button.setText('Current Mode: Basic Mode')
-            ConfigurationState.setState(Modes.BASIC)
+            ConfigurationState.setState(Modes.BASIC, self.logger)
 
     def hide(self):
         self.on_off_container.removeWidget(self.button)
