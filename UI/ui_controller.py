@@ -16,7 +16,7 @@ class UiController:
         
 
     def switchToMain(self):
-        self.main_content = MainContent()
+        self.main_content = MainContent(self.logger)
 
         if self.logging_content is not None:
             self.grid.removeItem(self.logging_content.getContainer().layout())
