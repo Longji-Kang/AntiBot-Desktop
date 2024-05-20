@@ -21,8 +21,8 @@ class MainWindow(QMainWindow):
 
         self.grid = QGridLayout()
         self.cWidg.setLayout(self.grid)
-        
-        self.controller = UiController(self.grid)
+        self.logger = LoggingComponentClass()
+        self.controller = UiController(self.grid, self.logger)
 
         self.sidebar = Sidebar(self.controller)
         self.sidebar_container = self.sidebar.getSidebar()
@@ -34,8 +34,6 @@ class MainWindow(QMainWindow):
         self.grid.addLayout(self.version_container, 2, 2, Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight)
 
         self.controller.switchToMain()
-
-        self.logger = LoggingComponentClass()
 
         # Updates Thread
         self.updates = UpdatesSchedulerClass(self.logger)

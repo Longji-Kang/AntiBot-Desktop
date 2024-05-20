@@ -16,7 +16,6 @@ class LoggingFilesInterface:
         self.lock.release()
 
     def logData(self, log_data):
-        print('try lock')
         self.tryLock()
 
         try:
@@ -28,3 +27,20 @@ class LoggingFilesInterface:
 
         finally:
             self.unlock()
+
+    def getLogData(self):
+        self.tryLock()
+        data = {}
+        try:
+            for log_file in os.listdir(self.path):
+                content = []
+                with open(f'{self.path}{log_file}') as curr_file:
+                    for line in curr_file:
+                        content.append(line)
+                
+                data.update({log_file : content})
+
+        finally:
+            self.unlock()
+
+        return data
