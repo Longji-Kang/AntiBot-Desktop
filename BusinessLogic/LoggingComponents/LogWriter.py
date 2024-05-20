@@ -11,6 +11,6 @@ class LogWriter:
         self.logging = logging_interface
 
     def writeToLog(self, log_info: str, subsystem: str):
-        log_data = f"({subsystem})[{datetime.today().strftime('%d-%m-%Y/%H:%M:%S')}] - {log_info}"
+        log_data = f"({subsystem}) - [{datetime.today().strftime('%d/%m/%Y %H:%M:%S')}] - {log_info}"
 
         self.logging.logData(log_data)
