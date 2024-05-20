@@ -1,8 +1,16 @@
 import requests
 import os
 import urllib.request
+import sys
+
+sys.path.append('../AntiBot-Desktop')
+
+from FileSystems.DefinitionFilesInterface import DefinitionsFileInterface
 
 class UpdateChecker():
+    def __init__(self):
+        self.definition_interface = DefinitionsFileInterface()
+
     def checkForUpdates(self):
         url = 'https://dqz7x5u9sf.execute-api.eu-west-1.amazonaws.com/longji-deployment-stage/updates'
 
@@ -10,21 +18,12 @@ class UpdateChecker():
 
         # response_url = response.json()['url']
         response_url     = 'https://longji-definitions-storage-bucket.s3.eu-west-1.amazonaws.com/definitions/1716140905-definition.pkl'
-        url_split        = response_url.split('/')
-        update_file_name = url_split[len(url_split) - 1]
 
-        current_file = None
+        current_file = self.definition_interface.getCurrentFile()
+        current_version = self.definition_interface.getCurrentVersion(current_file)
 
-        for file_name in os.listdir('Definitions'):
-            if file_name.endswith('.pkl'):
-                current_file = file_name
-                break
-
-        if current_file == None:
-            urllib.request.urlretrieve(response_url, f'Definitions/{update_file_name}')
+        if current_version == None:
+            self.definition_interface.downloadFile(response_url)
         else:
-            if current_file.split('-')[0] > update_file_name.split('-')[0]:
-                os.remove(f'Definitions/{current_file}')
-                urllib.request.urlretrieve(response_url, f'Definitions/{update_file_name}')
-            else: 
-                # Log same file found
+            updated = self.definition_interface.updateFile(response_url, current_version, current_file)
+            print(updated)
