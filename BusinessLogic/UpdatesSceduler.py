@@ -1,14 +1,17 @@
+import time
+from PyQt6.QtCore import QObject
+
 import sys
 sys.path.append('../AntiBot-Desktop')
 
-import time
-from PyQt6.QtCore import QObject
 from BusinessLogic.UpdateChecker import UpdateChecker
+from BusinessLogic.LoggingComponent import LoggingComponentClass
 
 class UpdatesSchedulerClass(QObject):
-    def __init__(self):
+    def __init__(self, logger: LoggingComponentClass):
         super().__init__()
-        self.updater = UpdateChecker()
+        self.logger = logger
+        self.updater = UpdateChecker(self.logger)
 
     def run(self):
         while True:

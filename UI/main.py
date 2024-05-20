@@ -7,6 +7,7 @@ from ui_controller import UiController
 import sys
 sys.path.append('../AntiBot-Desktop')
 from BusinessLogic.UpdatesSceduler import UpdatesSchedulerClass
+from BusinessLogic.LoggingComponent import LoggingComponentClass
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -34,7 +35,10 @@ class MainWindow(QMainWindow):
 
         self.controller.switchToMain()
 
-        self.updates = UpdatesSchedulerClass()
+        self.logger = LoggingComponentClass()
+
+        # Updates Thread
+        self.updates = UpdatesSchedulerClass(self.logger)
         self.updates_thread = QThread()
 
         self.updates.moveToThread(self.updates_thread)
@@ -42,6 +46,7 @@ class MainWindow(QMainWindow):
         self.updates_thread.started.connect(self.updates.run)
 
         self.updates_thread.start()
+
 
         self.showMaximized()
 
