@@ -1,9 +1,11 @@
 import sys
+from datetime import datetime
 
 sys.path.append('../AntiBot-Desktop')
 
 from FileSystems.DefinitionFilesInterface import DefinitionsFileInterface
 from BusinessLogic.LoggingComponent import LoggingComponentClass
+from BusinessLogic.ScanUpdateInfo import ScanUpdateInfo
 
 class UpdateChecker():
     SUBSYSTEM = 'Updates'
@@ -28,6 +30,7 @@ class UpdateChecker():
             self.logging.log("No definitions found, downloading...", self.SUBSYSTEM)
             self.definition_interface.downloadFile(response_url)
             self.logging.log(f"Definition downloaded!", self.SUBSYSTEM)
+            self.updateInfo()
         else:
             self.logging.log("Checking for new definition...", self.SUBSYSTEM)
             updated = self.definition_interface.updateFile(response_url, current_version, current_file)
@@ -36,5 +39,9 @@ class UpdateChecker():
                 self.logging.log("New definition found, and was downloaded!", self.SUBSYSTEM)
             else:
                 self.logging.log("Definiton file up to date, nothing was downloaded!", self.SUBSYSTEM)
+                self.updateInfo()
 
-            
+    def updateInfo(self):
+        date = datetime.today().strftime('%d/%m/%Y %H:%M:%S')
+        ScanUpdateInfo.setLastUpdate(date)
+        self.definition_interface.writeLastUpdate(date)

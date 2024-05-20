@@ -13,6 +13,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+
         self.setWindowTitle("AntiBot - Home")
 
         self.cWidg = QWidget()
@@ -22,6 +23,16 @@ class MainWindow(QMainWindow):
         self.grid = QGridLayout()
         self.cWidg.setLayout(self.grid)
         self.logger = LoggingComponentClass()
+
+        # Updates Thread
+        self.updates = UpdatesSchedulerClass(self.logger)
+        self.updates_thread = QThread()
+
+        self.updates.moveToThread(self.updates_thread)
+
+        self.updates_thread.started.connect(self.updates.run)
+
+        # UI
         self.controller = UiController(self.grid, self.logger)
 
         self.sidebar = Sidebar(self.controller)
@@ -33,18 +44,9 @@ class MainWindow(QMainWindow):
         self.grid.addLayout(self.sidebar_container, 0, 0, 3, 1, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         self.grid.addLayout(self.version_container, 2, 2, Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight)
 
-        self.controller.switchToMain()
-
-        # Updates Thread
-        self.updates = UpdatesSchedulerClass(self.logger)
-        self.updates_thread = QThread()
-
-        self.updates.moveToThread(self.updates_thread)
-
-        self.updates_thread.started.connect(self.updates.run)
-
         self.updates_thread.start()
 
+        self.controller.switchToMain()
 
         self.showMaximized()
 

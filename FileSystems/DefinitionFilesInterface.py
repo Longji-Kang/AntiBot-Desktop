@@ -27,15 +27,45 @@ class DefinitionsFileInterface:
     def downloadFile(self, url: str):
         url_split        = url.split('/')
         update_file_name = url_split[len(url_split) - 1]
-        urllib.request.urlretrieve(url, f'Definitions/{update_file_name}')
+        urllib.request.urlretrieve(url, f'{self.path}{update_file_name}')
 
     def updateFile(self, url: str, current_version: str, current_file: str = None):
         url_split        = url.split('/')
         update_file_name = url_split[len(url_split) - 1]
 
         if current_version < update_file_name.split('-')[0]:
-            os.remove(f'Definitions/{current_file}')
-            urllib.request.urlretrieve(url, f'Definitions/{update_file_name}')
+            os.remove(f'{self.path}{current_file}')
+            urllib.request.urlretrieve(url, f'{self.path}{update_file_name}')
             return True
         else:
             return False
+        
+    def writeLastUpdate(self, date_time: str):
+        with open(f'{self.path}update_info.txt', 'w') as file:
+            file.write(date_time)
+
+    def writeLastScan(self, date_time: str):
+        with open(f'{self.path}scan_info.txt', 'w') as file:
+            file.write(date_time)
+
+    def getLastScan(self):
+        scan = ''
+
+        if os.path.exists(f'{self.path}scan_info.txt'):
+            with open(f'{self.path}scan_info.txt', 'r') as file:
+                scan = file.readline()
+        else:
+            scan = 'None'
+
+        return scan
+    
+    def getLastUpdate(self):
+        update = ''
+        
+        if os.path.exists(f'{self.path}update_info.txt'):
+            with open(f'{self.path}update_info.txt', 'r') as file:
+                update = file.readline()
+        else:
+            update = 'None'
+
+        return update
