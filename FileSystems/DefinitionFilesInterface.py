@@ -7,6 +7,9 @@ class DefinitionsFileInterface:
     def getCurrentFile(self):
         current = None
 
+        if not os.path.exists(self.path):
+            os.mkdir(self.path)
+
         for file_name in os.listdir('Definitions'):
             if file_name.endswith('.pkl'):
                 current = file_name
