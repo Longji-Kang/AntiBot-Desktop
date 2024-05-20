@@ -37,16 +37,17 @@ class Sidebar(QVBoxLayout):
         self.container = container
 
         self.controller = controller
+        self.curr = 'home'
 
     def homeclicked(self):
-        print('home')
-        self.setCurrent('home')
-        self.controller.switchToMain()
+        if not self.curr == 'home':
+            self.setCurrent('home')
+            self.controller.switchToMain()
 
     def loggingclicked(self):
-        print('logging')
-        self.controller.switchToLogging()
-        self.setCurrent('logging')
+        if not self.curr == 'logging':
+            self.controller.switchToLogging()
+            self.setCurrent('logging')
 
     def getSidebar(self):
         return self.container
@@ -57,7 +58,7 @@ class Sidebar(QVBoxLayout):
 
     def setCurrent(self, curr: str) -> None:
         self.resetButtons()
-
+        self.curr = curr
         if curr == 'home':
             self.homeButton.setPalette(CustomPalette.active_palette)
         elif curr == 'logging':
