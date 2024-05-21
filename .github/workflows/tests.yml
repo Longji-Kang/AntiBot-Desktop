@@ -1,0 +1,19 @@
+name: Python Unit Tests
+
+on:
+  push:
+    branches:
+      - 'feat/**'
+      - 'fix/**'
+
+jobs:
+  Python_Unit_Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v4
+      - id: py_setup
+        run: pip install -r requirements.txt
+      - id: run_tests
+        run: |
+          python -m unittest discover test/
