@@ -11,8 +11,9 @@ class LoggingContent:
         self.logger = logger
         self.container = QVBoxLayout()
         self.text_field = QTextEdit()
-        # self.text_field.setStyleSheet('<style>p {color: red;} div {display: flex; background-color: white;}</style>')
+
         self.text_field.setReadOnly(True)
+        self.text_field.setLineWidth(600)
 
         data = self.logger.get_logs()
         self.text_field.setText(data)
