@@ -123,9 +123,12 @@ class DefinitionsFileInterface:
             self.getLock()
 
             url = 'https://longji-definitions-storage-bucket.s3.eu-west-1.amazonaws.com/definitions/clean.csv'
+            url_feat = 'https://longji-definitions-storage-bucket.s3.eu-west-1.amazonaws.com/definitions/features.pkl'
 
             if not os.path.exists(f'{self.path}clean.csv'):
                 urllib.request.urlretrieve(url, f'{self.path}clean.csv')
+            if not os.path.exists(f'{self.path}features.pkl'):
+                urllib.request.urlretrieve(url_feat, f'{self.path}features.pkl')
         finally:
             self.unlock()
 
