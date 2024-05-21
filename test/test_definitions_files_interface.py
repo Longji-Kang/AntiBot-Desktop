@@ -13,6 +13,11 @@ class DefinitionsTest(unittest.TestCase):
 
         self.url = 'https://longji-definitions-storage-bucket.s3.eu-west-1.amazonaws.com/definitions/1716298960-definition.pkl'
 
+        try:
+            os.mkdir('Definitions')
+        except:
+            print('Dir already exists')
+
     def removeDefFiles(self):
         for file in os.listdir('Definitions'):
             os.remove(f'Definitions/{file}')
