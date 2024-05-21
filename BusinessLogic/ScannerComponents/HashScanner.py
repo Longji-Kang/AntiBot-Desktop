@@ -6,9 +6,9 @@ class HashScanner:
 
     def checkFile(self, file):
         with open(file, 'rb', buffering=0) as f:
-            fhash = hashlib.sha256(f).hexdigest()
+            hash = hashlib.file_digest(f, 'sha256').hexdigest()
 
-            if fhash in self.hash_set:
-                return True
-            else:
-                return False
+        if hash in self.hash_set:
+            return True
+        else:
+            return False

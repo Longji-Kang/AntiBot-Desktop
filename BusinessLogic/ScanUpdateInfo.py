@@ -1,5 +1,10 @@
 from threading import Lock
 
+import sys
+sys.path.append('../AntiBot-Desktop')
+
+from FileSystems.DefinitionFilesInterface import DefinitionsFileInterface
+
 class ScanUpdateInfo:
     last_update = "-"
     last_scan = "-"
@@ -15,12 +20,16 @@ class ScanUpdateInfo:
             ScanUpdateInfo.lock.release()
 
     @staticmethod
-    def getLastScan() -> str:
+    def getLastScan(file_inter: DefinitionsFileInterface) -> str:
         last_scan = ''
 
         try:
             ScanUpdateInfo.lock.acquire()
-            last_scan = ScanUpdateInfo.last_scan
+    
+            if ScanUpdateInfo.last_scan == '-':
+                last_scan = file_inter.getLastScan()
+            else:
+                last_scan = ScanUpdateInfo.last_scan
         finally:
             ScanUpdateInfo.lock.release()
 
@@ -35,11 +44,15 @@ class ScanUpdateInfo:
             ScanUpdateInfo.lock.release()
 
     @staticmethod
-    def getLastUpdate() -> str:
+    def getLastUpdate(file_inter: DefinitionsFileInterface) -> str:
         last_update = ''
         try:
             ScanUpdateInfo.lock.acquire()
-            last_update = ScanUpdateInfo.last_update
+            
+            if ScanUpdateInfo.last_scan == '-':
+                last_update = file_inter.getLastUpdate()
+            else:
+                last_update = ScanUpdateInfo.last_update
         finally:
             ScanUpdateInfo.lock.release()
         return last_update

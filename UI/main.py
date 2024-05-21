@@ -43,9 +43,8 @@ class MainWindow(QMainWindow):
         self.scan.moveToThread(self.scan_thread)
         self.scan_thread.started.connect(self.scan.run)
 
-
         # UI
-        self.controller = UiController(self.grid, self.logger)
+        self.controller = UiController(self.grid, self.logger, self.definitions_interface)
 
         self.sidebar = Sidebar(self.controller)
         self.sidebar_container = self.sidebar.getSidebar()

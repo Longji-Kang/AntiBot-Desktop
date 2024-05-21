@@ -1,5 +1,6 @@
 import sys
 from datetime import datetime
+import requests
 
 sys.path.append('../AntiBot-Desktop')
 
@@ -17,11 +18,10 @@ class UpdateChecker():
     def checkForUpdates(self):
         url = 'https://dqz7x5u9sf.execute-api.eu-west-1.amazonaws.com/longji-deployment-stage/updates'
 
-        # response = requests.get(url)
+        response = requests.get(url)
 
-        # response_url = response.json()['url']
+        response_url = response.json()['url']
         self.logging.log("Checking for updates...", self.SUBSYSTEM)
-        response_url     = 'https://longji-definitions-storage-bucket.s3.eu-west-1.amazonaws.com/definitions/1716140905-definition.pkl'
 
         current_file = self.definition_interface.getCurrentFile()
         current_version = self.definition_interface.getCurrentVersion(current_file)
@@ -37,10 +37,12 @@ class UpdateChecker():
             self.logging.log("Checking for new definition...", self.SUBSYSTEM)
             updated = self.definition_interface.updateFile(response_url, current_version, current_file)
 
-            if updated:
-                self.logging.log("New definition found, and was downloaded!", self.SUBSYSTEM)
+            print(updated)
+
+            if updated == True:
+                self.logging.log("New definition found and was downloaded! New version - " + self.definition_interface.getCurrentVersion(self.definition_interface.getCurrentFile()), self.SUBSYSTEM)
             else:
-                self.logging.log("Definiton file up to date, nothing was downloaded!", self.SUBSYSTEM)
+                self.logging.log("Definiton file up to date - nothing was downloaded!", self.SUBSYSTEM)
                 self.updateInfo()
 
     def updateInfo(self):

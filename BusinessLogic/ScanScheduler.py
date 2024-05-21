@@ -13,11 +13,10 @@ class ScanScheduler(QObject):
         super().__init__()
         self.logger = logger
         self.definitions = definitions
-        self.scanner = Scanner(self.definitions)
+        self.scanner = Scanner(self.definitions, self.logger)
 
     def run(self):
         while True:
-            time.sleep(5)
-            print('here')
+            time.sleep(10)
             self.scanner.scan()
             time.sleep(3600)

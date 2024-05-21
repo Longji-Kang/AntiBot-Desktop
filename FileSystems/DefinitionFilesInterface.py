@@ -24,7 +24,7 @@ class DefinitionsFileInterface:
                 os.mkdir(self.path)
 
             for file_name in os.listdir('Definitions'):
-                if file_name.endswith('.pkl'):
+                if file_name.endswith('definition.pkl'):
                     current = file_name
                     break
         finally:
@@ -54,13 +54,12 @@ class DefinitionsFileInterface:
             self.unlock()
 
     def updateFile(self, url: str, current_version: str, current_file: str = None):
+        status = False
         try:
             self.getLock()
 
             url_split        = url.split('/')
             update_file_name = url_split[len(url_split) - 1]
-
-            status = False
 
             if current_version < update_file_name.split('-')[0]:
                 os.remove(f'{self.path}{current_file}')
@@ -138,7 +137,7 @@ class DefinitionsFileInterface:
 
             with open(f'{self.path}clean.csv', 'r') as file:
                 for line in file:
-                    hSet.add(line.replace('\n', ''))
+                    hSet.add(line.strip())
         finally:
             self.unlock()
         return hSet

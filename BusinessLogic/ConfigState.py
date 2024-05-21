@@ -1,4 +1,4 @@
-from BusinessLogic.StateEnums import Modes, OnOff
+from BusinessLogic.StateEnums import Modes, OnOff, DeleteNoDelete
 
 import sys
 sys.path.append('../AntiBot-Desktop')
@@ -8,6 +8,7 @@ from BusinessLogic.LoggingComponent import LoggingComponentClass
 class ConfigurationState:
     mode: Modes = Modes.BASIC
     state: OnOff = OnOff.ON
+    delete: DeleteNoDelete = DeleteNoDelete.DELETE
 
     subsystem = 'Config'
     @staticmethod
@@ -27,3 +28,12 @@ class ConfigurationState:
     @staticmethod
     def getOnOff() -> OnOff:
         return ConfigurationState.state
+    
+    @staticmethod
+    def setDelete(delete: DeleteNoDelete, logger: LoggingComponentClass):
+        ConfigurationState.delete = delete
+        logger.log(f'Changed action to {delete.value}', ConfigurationState.subsystem)
+
+    @staticmethod
+    def getDelete() -> DeleteNoDelete:
+        return ConfigurationState.delete
