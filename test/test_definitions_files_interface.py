@@ -13,6 +13,13 @@ class DefinitionsTest(unittest.TestCase):
 
         self.url = 'https://longji-definitions-storage-bucket.s3.eu-west-1.amazonaws.com/definitions/1716298960-definition.pkl'
 
+        try:
+            os.mkdir('Definitions')
+        except:
+            print('Dir already exists')
+
+        self.removeDefFiles()
+
     def removeDefFiles(self):
         for file in os.listdir('Definitions'):
             os.remove(f'Definitions/{file}')
@@ -34,14 +41,14 @@ class DefinitionsTest(unittest.TestCase):
 
         self.removeDefFiles()
 
-        file = 'Definitions/1_definition.pkl'
+        file = 'Definitions/1-definition.pkl'
 
         with open(file, 'w'):
             print('Create temp file')
 
         def_inter = DefinitionsFileInterface()
 
-        def_inter.updateFile(self.url, '1', '1_definition.pkl')
+        def_inter.updateFile(self.url, '1', '1-definition.pkl')
 
         self.assertTrue('1716298960-definition.pkl' in os.listdir('Definitions'))
 
