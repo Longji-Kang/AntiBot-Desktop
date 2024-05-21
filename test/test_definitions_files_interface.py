@@ -18,6 +18,8 @@ class DefinitionsTest(unittest.TestCase):
         except:
             print('Dir already exists')
 
+        self.removeDefFiles()
+
     def removeDefFiles(self):
         for file in os.listdir('Definitions'):
             os.remove(f'Definitions/{file}')
