@@ -41,14 +41,14 @@ class DefinitionsTest(unittest.TestCase):
 
         self.removeDefFiles()
 
-        file = 'Definitions/1_definition.pkl'
+        file = 'Definitions/1-definition.pkl'
 
         with open(file, 'w'):
             print('Create temp file')
 
         def_inter = DefinitionsFileInterface()
 
-        def_inter.updateFile(self.url, '1', '1_definition.pkl')
+        def_inter.updateFile(self.url, '1', '1-definition.pkl')
 
         self.assertTrue('1716298960-definition.pkl' in os.listdir('Definitions'))
 
