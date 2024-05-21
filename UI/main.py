@@ -8,6 +8,8 @@ import sys
 sys.path.append('../AntiBot-Desktop')
 from BusinessLogic.UpdatesSceduler import UpdatesSchedulerClass
 from BusinessLogic.LoggingComponent import LoggingComponentClass
+from FileSystems.DefinitionFilesInterface import DefinitionsFileInterface
+from BusinessLogic.ScanScheduler import ScanScheduler
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -22,15 +24,25 @@ class MainWindow(QMainWindow):
 
         self.grid = QGridLayout()
         self.cWidg.setLayout(self.grid)
+
         self.logger = LoggingComponentClass()
+        self.definitions_interface = DefinitionsFileInterface()
 
         # Updates Thread
-        self.updates = UpdatesSchedulerClass(self.logger)
+        self.updates = UpdatesSchedulerClass(self.logger, self.definitions_interface)
         self.updates_thread = QThread()
 
         self.updates.moveToThread(self.updates_thread)
 
         self.updates_thread.started.connect(self.updates.run)
+
+        # Scan Thread
+        self.scan = ScanScheduler(self.logger, self.definitions_interface)
+        self.scan_thread = QThread()
+
+        self.scan.moveToThread(self.scan_thread)
+        self.scan_thread.started.connect(self.scan.run)
+
 
         # UI
         self.controller = UiController(self.grid, self.logger)
@@ -45,6 +57,7 @@ class MainWindow(QMainWindow):
         self.grid.addLayout(self.version_container, 2, 2, Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight)
 
         self.updates_thread.start()
+        self.scan_thread.start()
 
         self.controller.switchToMain()
 

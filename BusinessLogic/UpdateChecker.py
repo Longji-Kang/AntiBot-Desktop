@@ -10,8 +10,8 @@ from BusinessLogic.ScanUpdateInfo import ScanUpdateInfo
 class UpdateChecker():
     SUBSYSTEM = 'Updates'
 
-    def __init__(self, logging: LoggingComponentClass):
-        self.definition_interface = DefinitionsFileInterface()
+    def __init__(self, logging: LoggingComponentClass, definitons: DefinitionsFileInterface):
+        self.definition_interface = definitons
         self.logging = logging
 
     def checkForUpdates(self):
@@ -25,6 +25,8 @@ class UpdateChecker():
 
         current_file = self.definition_interface.getCurrentFile()
         current_version = self.definition_interface.getCurrentVersion(current_file)
+
+        self.definition_interface.checkHashUpdate()
 
         if current_version == None:
             self.logging.log("No definitions found, downloading...", self.SUBSYSTEM)
