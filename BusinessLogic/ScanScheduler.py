@@ -19,4 +19,4 @@ class ScanScheduler(QObject):
         while True:
             time.sleep(10)
             self.scanner.scan()
-            time.sleep(3600)
+            time.sleep(600)

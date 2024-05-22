@@ -1,7 +1,7 @@
 import os
 import time
+import psutil
 from datetime import datetime
-from PyQt6.QtWidgets import QDialog, QLabel, QDialogButtonBox, QVBoxLayout
 
 import sys
 sys.path.append('../AntiBot-Desktop')
@@ -13,6 +13,7 @@ from BusinessLogic.StateEnums import Modes, DeleteNoDelete, OnOff
 from BusinessLogic.LoggingComponent import LoggingComponentClass
 from BusinessLogic.ScanUpdateInfo import ScanUpdateInfo
 from BusinessLogic.ScannerComponents.AiScanner import AiScanner
+from BusinessLogic.ScannerComponents.ProcessScanner import ProcessScanner
 
 class Scanner:
     subsystem = 'Scanner'
@@ -21,7 +22,7 @@ class Scanner:
         self.logger = logger
         self.count = 0
 
-    def scan(self):
+    def scan(self, dir: str = 'D:\\University\\COS 730\\COS730-Assignment2\\MockDrive'):
         if ConfigurationState.getOnOff() == OnOff.ON:
             date = datetime.today().strftime('%d/%m/%Y %H:%M:%S')
             ScanUpdateInfo.setLastScan(date)
@@ -30,12 +31,15 @@ class Scanner:
             h_set = self.definitions.getHashSet()
             h_scanner = HashScanner(h_set)
             ai_scanner = AiScanner(self.definitions.getCurrentFile())
+            p_scan = ProcessScanner()
+
+            self.walkProcesses(p_scan)
 
             start_epoch = int(time.time())
             
             self.logger.log('Starting scan...', Scanner.subsystem)
 
-            self.walk('D:\\University\\COS 730\\COS730-Assignment2\\MockDrive', h_scanner, ai_scanner)
+            self.walk(dir, h_scanner, ai_scanner)
             end_epoch = int(time.time())
 
             self.logger.log(f'Scanned {self.count} files in {end_epoch - start_epoch} seconds', Scanner.subsystem)
@@ -81,3 +85,19 @@ class Scanner:
 
         return sub_folders
         
+    def walkProcesses(self, p_scan = ProcessScanner):
+        processes = psutil.process_iter()
+
+        for proc in processes:
+            self.count = self.count + 1
+            if p_scan.checkProcess(proc) == True:
+                if ConfigurationState.getMode() == Modes.BASIC:
+                    self.logger.log(f'Found malicious process: {proc.name()} - Terminated', Scanner.subsystem)
+                else:
+                    if ConfigurationState.getDelete == DeleteNoDelete.DELETE:
+                        self.logger.log(f'Found malicious process: {proc.name()} - Terminated', Scanner.subsystem)
+                    else:
+                        self.logger.log(f'Found malicious process: {proc.name()} - Not terminated due to user choice', Scanner.subsystem)
+
+        self.logger.log(f'Scanned {self.count} processes', Scanner.subsystem)
+        self.count = 0
