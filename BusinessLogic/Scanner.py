@@ -92,9 +92,11 @@ class Scanner:
             self.count = self.count + 1
             if p_scan.checkProcess(proc) == True:
                 if ConfigurationState.getMode() == Modes.BASIC:
+                    proc.terminate()
                     self.logger.log(f'Found malicious process: {proc.name()} - Terminated', Scanner.subsystem)
                 else:
                     if ConfigurationState.getDelete == DeleteNoDelete.DELETE:
+                        proc.terminate()
                         self.logger.log(f'Found malicious process: {proc.name()} - Terminated', Scanner.subsystem)
                     else:
                         self.logger.log(f'Found malicious process: {proc.name()} - Not terminated due to user choice', Scanner.subsystem)

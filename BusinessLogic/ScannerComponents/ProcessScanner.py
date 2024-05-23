@@ -7,7 +7,6 @@ class ProcessScanner():
 
     def checkProcess(self, proc) -> bool:
         if proc.name() in self.malicious_processes:
-            proc.terminate()
             return True
         else:
             return False
