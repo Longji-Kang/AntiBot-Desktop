@@ -32,7 +32,7 @@ class UpdateCheckerTest(unittest.TestCase):
 
         updater.checkForUpdates()
 
-        self.assertTrue('1716298960-definition.pkl' in os.listdir('Definitions'))
+        self.assertTrue('1716558602-definition.pkl' in os.listdir('Definitions'))
 
         self.removeDefFiles()
 
@@ -47,7 +47,7 @@ class UpdateCheckerTest(unittest.TestCase):
 
         updater.checkForUpdates()
 
-        self.assertTrue('1716298960-definition.pkl' in os.listdir('Definitions'))
+        self.assertTrue('1716558602-definition.pkl' in os.listdir('Definitions'))
 
         self.removeDefFiles()
 
